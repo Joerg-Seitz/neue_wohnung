@@ -117,12 +117,20 @@ RSpec.describe GetNewApartments do
       minimum_rooms_number: 3,
       maximum_rooms_number: 4
     )
-    nonmatching_receiver = Receiver.create!(
+    nonmatching_rooms_receiver = Receiver.create!(
       name: "Adam",
       telegram_chat_id: "second-chat-id",
       include_wbs: false,
       minimum_rooms_number: 1,
       maximum_rooms_number: 2
+    )
+    nonmatching_zip_receiver = Receiver.create!(
+      name: "Irene and Chris",
+      telegram_chat_id: "first-chat-id",
+      include_wbs: false,
+      minimum_rooms_number: 3,
+      maximum_rooms_number: 4,
+      zip_codes: ["12345"]
     )
     scrape_all = instance_double(ScrapeAll, call: [apartment])
     notify_about_apartment = instance_double(NotifyAboutApartment, call: nil)
@@ -136,7 +144,9 @@ RSpec.describe GetNewApartments do
     expect(notify_about_apartment).to have_received(:call)
       .with(matching_receiver, apartment)
     expect(notify_about_apartment).not_to have_received(:call)
-      .with(nonmatching_receiver, apartment)
+      .with(nonmatching_rooms_receiver, apartment)
+    expect(notify_about_apartment).not_to have_received(:call)
+      .with(nonmatching_zip_receiver, apartment)
   end
 
   it "selects apartment when number of rooms is unknown" do

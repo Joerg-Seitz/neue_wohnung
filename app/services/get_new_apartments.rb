@@ -36,9 +36,11 @@ class GetNewApartments
   def matches_preferences?(receiver, apartment)
     rooms_number = apartment.properties.fetch("rooms_number", nil)
     wbs = apartment.properties.fetch("wbs", false)
+    zip = apartment.properties.fetch("address", "").match(/(\d{5})/)[1]
 
     return false if rooms_number && !(receiver.minimum_rooms_number..receiver.maximum_rooms_number).cover?(rooms_number)
     return false if wbs && !receiver.include_wbs?
+    return false if receiver.zip_codes.present? && receiver.zip_codes.exclude?(zip)
 
     true
   end
