@@ -26,8 +26,7 @@ class NotifyAboutApartment
   attr_accessor :send_telegram_message
 
   def format_google_maps_link(apartment)
-    return "" unless apartment.properties.key?("address")
-    return "" unless apartment.properties["address"].present?
+    return unless apartment.properties["address"]
 
     params = apartment.properties["address"]
                       .gsub(" ", "+")

@@ -33,6 +33,7 @@ class GetNewApartments
 
   attr_accessor :scrape_all, :notify_about_apartment
 
+  # rubocop:disable Metrics/AbcSize
   def matches_preferences?(receiver, apartment)
     rooms_number = apartment.properties.fetch("rooms_number", nil)
     wbs = apartment.properties.fetch("wbs", false)
@@ -44,4 +45,5 @@ class GetNewApartments
 
     true
   end
+  # rubocop:enable Metrics/AbcSize
 end
