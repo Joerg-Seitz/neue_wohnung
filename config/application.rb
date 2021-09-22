@@ -34,6 +34,9 @@ module NeueWohnung
     # Don't generate system test files.
     config.generators.system_tests = nil
 
-    config.telegram_token = ENV.fetch("TELEGRAM_TOKEN")
+    config.telegram_token = ENV.fetch(
+      "TELEGRAM_TOKEN",
+      YAML.load_file(".secrets.yml")["telegram_token"]
+    )
   end
 end
